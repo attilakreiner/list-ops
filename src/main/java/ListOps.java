@@ -17,6 +17,9 @@ class ListOps {
     }
 
     static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
+        checkNotNull(list);
+        checkNotNull(predicate);
+
         List<T> result = new ArrayList<>();
         for (T element: list) {
             if (predicate.test(element)) {
@@ -27,6 +30,8 @@ class ListOps {
     }
 
     static <T> int size(List<T> list) {
+        checkNotNull(list);
+        
         int size = 0;
         for (T element: list) {
             size++;
@@ -35,6 +40,9 @@ class ListOps {
     }
 
     static <T, U> List<U> map(List<T> list, Function<T, U> transform) {
+        checkNotNull(list);
+        checkNotNull(transform);
+
         List<U> result = new ArrayList<>();
         for (T element: list) {
             U transformed = transform.apply(element);
@@ -48,6 +56,10 @@ class ListOps {
     }
 
     static <T, U> U foldLeft(List<T> list, U initial, BiFunction<U, T, U> f) {
+        checkNotNull(list);
+        checkNotNull(initial);
+        checkNotNull(f);
+
         U result = initial;
         for (T element: list) {
             result = f.apply(result, element);
@@ -56,12 +68,22 @@ class ListOps {
     }
 
     static <T, U> U foldRight(List<T> list, U initial, BiFunction<T, U, U> f) {
+        checkNotNull(list);
+        checkNotNull(initial);
+        checkNotNull(f);
+
         U result = initial;
         for (int i = size(list) - 1; i >= 0; i--) {
             T element = list.get(i);
             result = f.apply(element, result);
         }
         return result;
+    }
+
+    private static <T> void checkNotNull(T object) {
+        if (object == null) {
+            throw new NullPointerException();
+        }
     }
 
     private ListOps() {
